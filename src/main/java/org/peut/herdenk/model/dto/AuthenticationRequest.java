@@ -1,4 +1,4 @@
-package nl.novi.payload.request;
+package org.peut.herdenk.model.dto;
 
 public class AuthenticationRequest {
 

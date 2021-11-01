@@ -1,9 +1,11 @@
 package org.peut.herdenk.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.peut.herdenk.model.dto.GraveDto;
+import org.peut.herdenk.model.dto.GraveRegisterDto;
+
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "graves")
@@ -16,11 +18,8 @@ public class Grave {
     private String occupantFullName;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date creationDate;
-
-    @Column
-    private boolean publicRead = true;
 
 
     @OneToMany(
@@ -28,8 +27,8 @@ public class Grave {
             mappedBy = "graveId",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER)
-    private Set<Authority> authorities = new HashSet<>();
+            fetch = FetchType.LAZY)
+    private List<Authority> authorities = new ArrayList<>();
 
     @OneToMany(
             targetEntity = Reaction.class,
@@ -37,5 +36,60 @@ public class Grave {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER)
-    private Set<Reaction> reactions = new HashSet<>();
+    private List<Reaction> reactions = new ArrayList<>();
+
+    public static Grave from( GraveDto graveDto){
+        Grave grave = new Grave();
+
+        grave.setOccupantFullName( graveDto.getOccupantFullName());
+        return grave;
+    }
+
+    public static Grave from( GraveRegisterDto graveRegisterDto){
+        Grave grave = new Grave();
+
+        grave.setOccupantFullName( graveRegisterDto.getOccupantFullName());
+        return grave;
+    }
+
+
+    public Long getGraveId() {
+        return graveId;
+    }
+
+    public void setGraveId(Long graveId) {
+        this.graveId = graveId;
+    }
+
+    public String getOccupantFullName() {
+        return occupantFullName;
+    }
+
+    public void setOccupantFullName(String occupantFullName) {
+        this.occupantFullName = occupantFullName;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    public List<Reaction> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(List<Reaction> reactions) {
+        this.reactions = reactions;
+    }
 }

@@ -1,4 +1,4 @@
-package nl.novi.payload.response;
+package org.peut.herdenk.model.dto;
 
 public class AuthenticationResponse {
 

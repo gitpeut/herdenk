@@ -1,3 +1,5 @@
+package org.peut.herdenk.utility;
+
 public enum Access {
     NONE(0),
     PUBLIC(1),
@@ -7,21 +9,30 @@ public enum Access {
 
     private int level;
 
-    Access( int level){
+    Access(int level){
         this.level = level;
     }
+
     public int getLevel(){
         return( this.level );
     }
 
-    public boolean atLeast( String candidate, String minLevel){
+    public static boolean atLeast( String candidate, String minLevel){
         return Access.valueOf(candidate).level >=  Access.valueOf( minLevel ).level;
     }
 
-    public boolean isLess( String candidate, String topLevel){
+    public static boolean isLess( String candidate, String topLevel){
         return Access.valueOf(candidate).level <  Access.valueOf( topLevel ).level;
     }
 
-
+    public static boolean isNameValid(String name) {
+        boolean valid = true;
+        try {
+            int dummy = Access.valueOf(name).getLevel();
+        } catch (IllegalArgumentException e) {
+            valid = false;
+        }
+        return valid;
+    }
 
 }

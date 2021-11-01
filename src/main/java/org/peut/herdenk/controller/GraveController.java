@@ -1,8 +1,10 @@
 package org.peut.herdenk.controller;
 
-import org.peut.herdenk.model.User;
-import org.peut.herdenk.model.dto.UserDto;
-import org.peut.herdenk.service.UserService;
+import org.peut.herdenk.model.Grave;
+import org.peut.herdenk.model.dto.GraveDto;
+import org.peut.herdenk.model.dto.GraveRegisterDto;
+import org.peut.herdenk.model.dto.GraveSummaryDto;
+import org.peut.herdenk.service.GraveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,46 +14,62 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping( path = "/api/v1/users")
-public class UserController {
+@RequestMapping( path = "/api/v1/graves")
+public class GraveController {
 
 
-    private final UserService userService;
+    private final GraveService graveService;
 
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public GraveController(GraveService graveService) {
+        this.graveService = graveService;
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers() {
+    public ResponseEntity<List<GraveDto>> getGraves() {
 
-        List<User> users = userService.getUsers();
-        List<UserDto> userDtos = users.stream().map( (UserDto::from) ).collect( Collectors.toList());
+        List<Grave>  graves = graveService.getGraves();
+        List<GraveDto> graveDtos = graves.stream().map( (GraveDto::from) ).collect( Collectors.toList());
 
-        return new ResponseEntity<>(userDtos,HttpStatus.OK);
+        return new ResponseEntity<>(graveDtos,HttpStatus.OK);
     }
+
+    @GetMapping(path = "/summary" )
+    public ResponseEntity<List<GraveSummaryDto>> getSummaries() {
+        List<GraveSummaryDto> graveSummaryDtos = graveService.getGraveSummaries();
+        return new ResponseEntity<>(graveSummaryDtos,HttpStatus.OK);
+    }
+
+    @GetMapping( path="/{graveId}" )
+    public ResponseEntity<GraveDto> getGrave( @PathVariable("graveId") Long graveId) {
+
+        Grave grave = graveService.getGrave( graveId );
+        GraveDto graveDto = GraveDto.from( grave );
+
+        return new ResponseEntity<>(graveDto,HttpStatus.OK);
+    }
+
 
     @PostMapping
-    public ResponseEntity<UserDto> registerUser(@RequestBody final UserDto userDto){
+    public ResponseEntity<GraveDto> registerGrave(@RequestBody final GraveRegisterDto graveRegisterDto){
 
-           User user = User.from(userDto);
-           user = userService.registerUser(user);
+           Grave grave = Grave.from( graveRegisterDto);
+           grave = graveService.registerGrave( grave, graveRegisterDto.getPublicAccess() );
 
-           return new ResponseEntity<>(UserDto.from(user), HttpStatus.OK);
+           return new ResponseEntity<>(GraveDto.from( grave ), HttpStatus.OK);
     }
 
-    @PutMapping( path="{userId}" )
-    public ResponseEntity<UserDto> updateUser( @RequestBody final UserDto userDto, @PathVariable("userId") Long userId ){
+    @PutMapping( path="/{graveId}" )
+    public ResponseEntity<GraveDto> updateGrave( @RequestBody final GraveDto graveDto, @PathVariable("graveId") Long graveId ){
 
-        User user = userService.updateUser( User.from( userDto ), userId );
-        return new ResponseEntity<>( UserDto.from( user ), HttpStatus.OK);
+        Grave grave = graveService.updateGrave( Grave.from( graveDto ), graveId );
+        return new ResponseEntity<>( GraveDto.from( grave ), HttpStatus.OK);
     }
 
-    @DeleteMapping( path="{userId}" )
-    public ResponseEntity<UserDto> deleteUser( @PathVariable("userId") Long userId ){
-        User user = userService.deleteUser( userId );
-        return new ResponseEntity<>( UserDto.from( user ), HttpStatus.OK);
+    @DeleteMapping( path="/{graveId}" )
+    public ResponseEntity<GraveDto> deleteGrave( @PathVariable("graveId") Long graveId ){
+        Grave grave = graveService.deleteGrave( graveId );
+        return new ResponseEntity<>( GraveDto.from( grave ), HttpStatus.OK);
     }
 
 

@@ -1,16 +1,8 @@
 
-INSERT INTO users (username, password, enabled)
+INSERT INTO users ( full_name, email, password, enabled, role)
 VALUES
-('user', '$2a$12$8Dp3ed9TUrwlG9Put.EVDelL8iZew0YndzMsJmHIb3iIgHTZ.jt1m', TRUE),
-('admin', '$2a$12$8Dp3ed9TUrwlG9Put.EVDelL8iZew0YndzMsJmHIb3iIgHTZ.jt1m', TRUE),
-('peter', '$2a$12$8Dp3ed9TUrwlG9Put.EVDelL8iZew0YndzMsJmHIb3iIgHTZ.jt1m', TRUE),
-('nieuw', '$2a$12$8Dp3ed9TUrwlG9Put.EVDelL8iZew0YndzMsJmHIb3iIgHTZ.jt1m', TRUE);
+('public', 'public@public.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', FALSE, 'ROLE_USER'),
+('admin','admin@admin.com', '$2a$12$8Dp3ed9TUrwlG9Put.EVDelL8iZew0YndzMsJmHIb3iIgHTZ.jt1m', TRUE, 'ROLE_ADMIN'),
+('user', 'user@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER'),
+('user2', 'user2@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER');
 
-INSERT INTO authorities (username, authority)
-VALUES
-('user', 'ROLE_USER'),
-('admin', 'ROLE_ADMIN'),
-('peter', 'ROLE_USER'),
-('peter', 'ROLE_ADMIN'),
-('nieuw', 'ROLE_USER'),
-('nieuw', 'ROLE_nieuw');

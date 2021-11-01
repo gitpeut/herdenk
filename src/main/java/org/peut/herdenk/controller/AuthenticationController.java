@@ -1,11 +1,13 @@
-package nl.novi.controller;
+package org.peut.herdenk.controller;
 
-import nl.novi.payload.request.AuthenticationRequest;
-import nl.novi.payload.response.AuthenticationResponse;
-import nl.novi.service.UserAuthenticateService;
+import org.peut.herdenk.model.dto.AuthenticationRequest;
+import org.peut.herdenk.model.dto.AuthenticationResponse;
+import org.peut.herdenk.service.UserAuthenticateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AuthenticationController {
@@ -17,7 +19,7 @@ public class AuthenticationController {
         this.userAuthenticateService = userAuthenticateService;
     }
 
-    @PostMapping(value = "/authenticate")
+    @PostMapping(value = "/api/v1/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         AuthenticationResponse authenticationResponse = userAuthenticateService.authenticateUser(authenticationRequest);

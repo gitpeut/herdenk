@@ -1,12 +1,12 @@
 package org.peut.herdenk.exceptions;
 
 
-public class DuplicateUserException extends RuntimeException {
+public class DuplicateException extends RuntimeException {
 
-    public DuplicateUserException(String message) {
+    public DuplicateException(String message) {
         super(message);
     }
-    public DuplicateUserException() {
+    public DuplicateException() {
         super("Bad request.");
     }
 

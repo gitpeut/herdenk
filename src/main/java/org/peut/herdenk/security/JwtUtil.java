@@ -1,9 +1,8 @@
-package nl.novi.security;
+package org.peut.herdenk.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class JwtUtil {
 
     private final static String SECRET_KEY = "secret";
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -44,7 +43,7 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        long validPeriod = 1000 * 60 * 60 * 24 * 10;   // 10 days in ms
+        long validPeriod = 1000 * 60 * 60 * 24 * 7;   // a week
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)
@@ -56,9 +55,9 @@ public class JwtUtil {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        final String username = extractEmail(token);
 
-        System.out.println(" Attempt to login with username " + username + " Userdetail username " + userDetails.getUsername());
+        System.out.println(" Attempt to login with email " + username + " Userdetail username " + userDetails.getUsername());
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 

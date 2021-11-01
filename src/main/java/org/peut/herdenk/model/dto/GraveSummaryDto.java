@@ -3,34 +3,32 @@ package org.peut.herdenk.model.dto;
 
 import org.peut.herdenk.model.Grave;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
-
-public class GraveDto {
-
+public class GraveSummaryDto {
 
     private Long    graveId;
     private String  occupantFullName;
     private Date    creationDate;
-    private List<AuthorityDto> authorities;
-    private List<ReactionDto> reactions;
+    private String  access;
 
-    public static org.peut.herdenk.model.dto.GraveDto from(Grave grave){
-            org.peut.herdenk.model.dto.GraveDto graveDto = new org.peut.herdenk.model.dto.GraveDto();
-            graveDto.setGraveId( grave.getGraveId() );
-            graveDto.setOccupantFullName( grave.getOccupantFullName());
-            graveDto.setCreationDate( grave.getCreationDate());
 
-            if (Objects.nonNull( grave.getAuthorities() )){
-                graveDto.setAuthorities( grave.getAuthorities().stream().map(AuthorityDto::from).collect(Collectors.toList() ));
-            }
-            if (Objects.nonNull( grave.getReactions() )){
-                graveDto.setReactions( grave.getReactions().stream().map(ReactionDto::from).collect(Collectors.toList() ));
-            }
-            return graveDto;
+    public static GraveSummaryDto from(Grave grave, String access){
+            GraveSummaryDto graveSummaryDto = new GraveSummaryDto();
+            graveSummaryDto.setGraveId( grave.getGraveId() );
+            graveSummaryDto.setOccupantFullName( grave.getOccupantFullName());
+            graveSummaryDto.setCreationDate( grave.getCreationDate());
+            graveSummaryDto.setAccess( access  );
+
+            return graveSummaryDto;
         }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
 
     public Long getGraveId() {
         return graveId;
@@ -56,19 +54,4 @@ public class GraveDto {
         this.creationDate = creationDate;
     }
 
-    public List<AuthorityDto> getAuthorities() {
-        return authorities;
-    }
-
-    public void setAuthorities(List<AuthorityDto> authorities) {
-        this.authorities = authorities;
-    }
-
-    public List<ReactionDto> getReactions() {
-        return reactions;
-    }
-
-    public void setReactions(List<ReactionDto> reactions) {
-        this.reactions = reactions;
-    }
 }

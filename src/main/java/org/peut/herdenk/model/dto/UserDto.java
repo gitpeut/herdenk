@@ -1,30 +1,34 @@
 package org.peut.herdenk.model.dto;
 
-
 import lombok.Data;
-import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.User;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
-public class UserPostDto {
+public class UserDto {
+
+    private Long userId;
     private String  fullName;
     private String  email;
     private boolean enabled;
     private String  password;
+    private String  role;
+    private List<AuthorityDto> authorities;
 
+    public static UserDto from(User user){
+        UserDto userDto = new UserDto();
 
-    public static ItemDto from(Item item){
-        ItemDto itemDto = new ItemDto();
-        itemDto.setId( item.getId() );
-        itemDto.setSerialNumber( item.getSerialNumber());
-        if (Objects.nonNull( item.getCart())){
-            itemDto.setPlainCartDto(PlainCartDto.from(item.getCart()));
+        userDto.setUserId( user.getUserId() );
+        userDto.setFullName( user.getFullName());
+        userDto.setEmail( user.getEmail() );
+        userDto.setEnabled( user.isEnabled() );
+        userDto.setPassword( "-- Intentionally left blank --");
+        userDto.setRole( user.getRole());
+        if (Objects.nonNull( user.getAuthorities() )){
+            userDto.setAuthorities( user.getAuthorities().stream().map(AuthorityDto::from).collect(Collectors.toList() ));
         }
-
-        return itemDto;
+        return userDto;
     }
 }

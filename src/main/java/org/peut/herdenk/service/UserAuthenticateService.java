@@ -1,48 +1,57 @@
-package nl.novi.service;
+package org.peut.herdenk.service;
 
-import nl.novi.payload.request.AuthenticationRequest;
-import nl.novi.payload.response.AuthenticationResponse;
-import nl.novi.security.JwtUtil;
-
+import org.peut.herdenk.exceptions.BadRequestException;
+import org.peut.herdenk.model.dto.AuthenticationRequest;
+import org.peut.herdenk.model.dto.AuthenticationResponse;
+import org.peut.herdenk.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserAuthenticateService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
+    private JwtUtil jwtUtl;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    public UserAuthenticateService(
+        AuthenticationManager authenticationManager,
+        UserDetailsService userDetailsService,
+        JwtUtil jwtUtl)
+    {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtl = jwtUtl;
 
-    @Autowired
-    JwtUtil jwtUtl;
+    }
 
     public AuthenticationResponse authenticateUser(AuthenticationRequest authenticationRequest) {
 
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
 
-        System.out.println("AuthenticateUser - User " + username + " Password " + password);
 
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
-            );
-        }
-        catch (BadCredentialsException ex) {
-            throw new UsernameNotFoundException("Incorrect username or password");
+            Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+            authenticationManager.authenticate( authentication );
+
+        } catch (BadCredentialsException ex) {
+            throw new BadRequestException("Incorrect username or password");
+        } catch( AuthenticationException e){
+            throw new RuntimeException("Something went wrong in authentication", e);
+        } catch( Exception e){
+            throw new RuntimeException("Something went wrong", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
         final String jwt = jwtUtl.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);

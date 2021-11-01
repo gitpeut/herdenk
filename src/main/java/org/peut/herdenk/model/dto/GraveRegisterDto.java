@@ -2,41 +2,23 @@ package org.peut.herdenk.model.dto;
 
 
 import org.peut.herdenk.model.Grave;
+
 import java.util.Date;
 
-public class GraveSummaryDto {
+public class GraveRegisterDto {
 
-    private Long    graveId;
+
     private String  occupantFullName;
-    private Date    creationDate;
-    private String  access;
+    private Boolean publicAccess;
 
 
-    public static GraveSummaryDto from(Grave grave, String access){
-            GraveSummaryDto graveSummaryDto = new GraveSummaryDto();
-            graveSummaryDto.setGraveId( grave.getGraveId() );
-            graveSummaryDto.setOccupantFullName( grave.getOccupantFullName());
-            graveSummaryDto.setCreationDate( grave.getCreationDate());
-            graveSummaryDto.setAccess( access  );
+    public static GraveRegisterDto from(Grave grave, Boolean access){
+            GraveRegisterDto graveRegisterDto = new GraveRegisterDto();
+            graveRegisterDto.setOccupantFullName( grave.getOccupantFullName());
+            graveRegisterDto.setPublicAccess( access  );
 
-            return graveSummaryDto;
+            return graveRegisterDto;
         }
-
-    public String getAccess() {
-        return access;
-    }
-
-    public void setAccess(String access) {
-        this.access = access;
-    }
-
-    public Long getGraveId() {
-        return graveId;
-    }
-
-    public void setGraveId(Long graveId) {
-        this.graveId = graveId;
-    }
 
     public String getOccupantFullName() {
         return occupantFullName;
@@ -46,12 +28,11 @@ public class GraveSummaryDto {
         this.occupantFullName = occupantFullName;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Boolean getPublicAccess() {
+        return publicAccess;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setPublicAccess(Boolean publicAccess) {
+        this.publicAccess = publicAccess;
     }
-
 }

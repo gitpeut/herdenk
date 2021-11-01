@@ -1,12 +1,12 @@
 package org.peut.herdenk.exceptions;
 
 
-public class NewUserException extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 
-    public NewUserException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
-    public NewUserException() {
+    public BadRequestException() {
         super("Bad request.");
     }
 
