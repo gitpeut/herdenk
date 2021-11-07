@@ -46,17 +46,19 @@ that Intellij will import all necessary dependencies for Spring Boot.
 
 #### Appplication.properties
 Then open in your IDE the file ...src/main/resources/application.properties and change 
-
+```
   spring.datasource.url=jdbc:postgresql://localhost:5432/herdenk
   spring.datasource.username=<The username you gave full access to in the Postgress instal;lation>
   spring.datasource.password=<The password of this user>
+```
 
 Also, decide where the image files uploaded by the users will reside by changing this variable
-
+```
   # Herdenk reaction media will be uploaded to this directory. Use UNIX directory
   # syntax. On windows / means the root directory of the disk the application is running on.
   herdenk.uploads=/herdenk/media
-  
+```
+
 ### Testing
 
 A postman collection is available to test 
