@@ -27,7 +27,7 @@ public class Grave {
             mappedBy = "graveId",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
 
     @OneToMany(
@@ -35,7 +35,7 @@ public class Grave {
             mappedBy = "graveId",
             cascade = CascadeType.ALL,
             orphanRemoval = true,
-            fetch = FetchType.EAGER)
+            fetch = FetchType.LAZY)
     private List<Reaction> reactions = new ArrayList<>();
 
     public static Grave from( GraveDto graveDto){

@@ -28,6 +28,7 @@ public class Authority implements Serializable {
     public Authority() {
     }
 
+
     public Authority(Long userId, Long graveId, String authority) {
         this.userId = userId;
         this.graveId = graveId;

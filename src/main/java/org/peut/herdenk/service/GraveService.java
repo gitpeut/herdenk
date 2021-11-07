@@ -2,6 +2,7 @@ package org.peut.herdenk.service;
 
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.DuplicateException;
+import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.Grave;
 import org.peut.herdenk.model.dto.GraveSummaryDto;
 import org.peut.herdenk.repository.GraveRepository;
@@ -55,6 +56,7 @@ public class GraveService {
         return graveRepository.findById( graveId ).orElseThrow( ()->new BadRequestException( String.format("Grave with id %d does not exist", graveId)));
     }
 
+
     public Grave registerGrave( Grave grave, Boolean publicAccess){
         Optional<Grave> optionalGrave    = graveRepository.findGraveByOccupantFullName( grave.getOccupantFullName() );
         if ( optionalGrave.isPresent() ){
@@ -64,7 +66,9 @@ public class GraveService {
         grave = graveRepository.save( grave );
 
         authorityService.setGraveOwner( grave.getGraveId() );
+
         updateGravePublicAccess( grave.getGraveId(), publicAccess );
+        grave.setAuthorities( authorityService.getAuthoritiesByGrave( grave.getGraveId() ) );
 
         return( grave );
     }
@@ -86,7 +90,6 @@ public class GraveService {
         if ( authorityService.isGravePublic( graveId)  != publiclyAccessible ){
             authorityService.setGravePublic( graveId, publiclyAccessible);
         }
-
         return( grave );
     }
 

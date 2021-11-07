@@ -39,8 +39,17 @@ public class ReactionController {
                 HttpStatus.OK);
     }
 
-    @GetMapping(path = "/{graveId}")
-    public ResponseEntity<List<ReactionResponseDto>> getReactions( @PathVariable("graveId") Long graveId ){
+    @GetMapping(path = "/user/{userId}")
+    public ResponseEntity<List<ReactionResponseDto>> getReactionsForUser( @PathVariable("userId") Long userId ){
+        return new ResponseEntity<>( reactionService.getReactionsForUser( userId )
+                .stream()
+                .map( (ReactionResponseDto::from) )
+                .collect( Collectors.toList()) ,
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/grave/{graveId}")
+    public ResponseEntity<List<ReactionResponseDto>> getReactionsForGrave( @PathVariable("graveId") Long graveId ){
         return new ResponseEntity<>( reactionService.getReactionsForGrave( graveId )
                 .stream()
                 .map( (ReactionResponseDto::from) )
@@ -48,7 +57,7 @@ public class ReactionController {
                 HttpStatus.OK);
     }
 
-    @PostMapping(path = "/{graveId}",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
+    @PostMapping(path = "/grave/{graveId}",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
     public ResponseEntity<List<ReactionResponseDto>> saveReaction(
                  @PathVariable("graveId") Long graveId,
                  @RequestPart(value = "media",required = false) MultipartFile multipartFile,
@@ -66,9 +75,27 @@ public class ReactionController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping( path="/{graveId}/{reactionId}" )
+    @PutMapping(path = "/{reactionId}",  consumes = { MediaType.MULTIPART_FORM_DATA_VALUE } )
+    public ResponseEntity<List<ReactionResponseDto>> updateReaction(
+            @PathVariable("reactionId") Long reactionId,
+            @RequestPart(value = "media",required = false) MultipartFile multipartFile,
+            @RequestPart(value = "reaction",required = false) ReactionRequestDto request
+    ) {
+
+        Reaction reaction = Reaction.from( request );
+        reaction.setReactionId( reactionId );
+
+        return new ResponseEntity<>( reactionService.updateReaction(
+                        reaction,
+                        multipartFile)
+                .stream()
+                .map( (ReactionResponseDto::from) )
+                .collect( Collectors.toList()) ,
+                HttpStatus.OK);
+    }
+
+    @DeleteMapping( path="/{reactionId}" )
     public ResponseEntity<List<ReactionResponseDto> > deleteReaction(
-            @PathVariable("graveId") Long graveId,
             @PathVariable("reactionId") Long reactionId ){
 
         return new ResponseEntity<>(  reactionService.deleteReaction( reactionId )
@@ -83,7 +110,7 @@ public class ReactionController {
     public ResponseEntity<List<ReactionResponseDto>> askPermission(
             @PathVariable("graveId") Long graveId,
             @PathVariable("permission") String permission ){
-        return new ResponseEntity<>( reactionService.askPermission( graveId, permission )
+        return new ResponseEntity<>( reactionService.addReactionType( graveId, permission )
                 .stream()
                 .map( (ReactionResponseDto::from) )
                 .collect( Collectors.toList()) ,
@@ -93,7 +120,30 @@ public class ReactionController {
     @GetMapping(path = "/permission/{graveId}" )
     public ResponseEntity<List<ReactionResponseDto>> getPermission(
             @PathVariable("graveId") Long graveId){
+
         return new ResponseEntity<>( reactionService.findPermissionQuestions( graveId )
+                .stream()
+                .map( (ReactionResponseDto::from) )
+                .collect( Collectors.toList()) ,
+                HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/token/{graveId}/{token}" )
+    public ResponseEntity<List<ReactionResponseDto>> sendToken(
+            @PathVariable("graveId") Long graveId,
+            @PathVariable("token")String token){
+        return new ResponseEntity<>( reactionService. addReactionType( graveId, token.toUpperCase() )
+                .stream()
+                .map( (ReactionResponseDto::from) )
+                .collect( Collectors.toList()) ,
+                HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/token/{graveId}/{token}" )
+    public ResponseEntity<List<ReactionResponseDto>> getToken(
+            @PathVariable("graveId") Long graveId,
+            @PathVariable("token") String token){
+        return new ResponseEntity<>( reactionService.findReactionType( graveId, token.toUpperCase() )
                 .stream()
                 .map( (ReactionResponseDto::from) )
                 .collect( Collectors.toList()) ,

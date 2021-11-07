@@ -7,7 +7,7 @@ public enum Access {
     WRITE(3),
     OWNER(4);
 
-    private int level;
+    private final int level;
 
     Access(int level){
         this.level = level;

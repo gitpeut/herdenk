@@ -6,11 +6,11 @@ VALUES
 ('user', 'user@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER'),
 ('user2', 'user2@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER');
 
-INSERT INTO graves ( occupant_full_name )
+INSERT INTO graves ( creation_date, occupant_full_name )
 VALUES
-('Napoleon Bonaparte'),
-('Willem de Zwijger'),
-('Zangeres zonder Naam');
+('2021-11-10', 'Napoleon Bonaparte'),
+('2021-11-09','Willem de Zwijger'),
+('2021-11-08','Zangeres zonder Naam');
 
 INSERT INTO authorities( user_id, grave_id, authority)
 VALUES

@@ -195,7 +195,6 @@ public class AuthorityService {
         }catch(Exception e){
             throw new RuntimeException( String.format("Error saving authority %s ", authority ), e );
         }
-
     }
 
     public void setGraveOwner(Long graveId ){

@@ -1,13 +1,12 @@
 package org.peut.herdenk.service;
 
+import org.peut.herdenk.config.HerdenkConfig;
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.FileNotFoundException;
 import org.peut.herdenk.model.Grave;
 import org.peut.herdenk.model.Reaction;
 import org.peut.herdenk.model.User;
 import org.peut.herdenk.repository.ReactionRepository;
-import org.peut.herdenk.utility.Access;
-import org.peut.herdenk.config.HerdenkConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +28,9 @@ import java.util.Optional;
 @Service
 public class ReactionService {
 
-    private String uploads;
-    @Autowired
-    private HerdenkConfig herdenkConfig;
+
+
+    private final HerdenkConfig herdenkConfig;
 
     private final ReactionRepository reactionRepository;
     private final AuthorityService authorityService;
@@ -41,12 +41,14 @@ public class ReactionService {
             ReactionRepository reactionRepository,
             AuthorityService authorityService,
             GraveService graveService,
-            UserService userService)
+            UserService userService,
+            HerdenkConfig herdenkConfig)
     {
         this.reactionRepository = reactionRepository;
         this.authorityService = authorityService;
         this.graveService = graveService;
         this.userService = userService;
+        this.herdenkConfig = herdenkConfig;
     }
 
     public Reaction getReaction( Long reactionId ){
@@ -61,7 +63,13 @@ public class ReactionService {
     }
 
     public List<Reaction> getReactionsForUser( Long userId){
-        return  reactionRepository.findAllByUserId( userId );
+        List<Reaction> reactions;
+        try {
+            reactions = userService.getUser( userId ).getReactions();
+        }catch(Exception e){
+            reactions = new ArrayList<>(); //return empty list
+        }
+        return reactions;
     }
 
     public List<Reaction> getReactionsForReaction( Long reactionId) {
@@ -93,13 +101,14 @@ public class ReactionService {
             reactionRepository.delete( reaction );
         }
 
-        deleteDirectory( Paths.get("/media/" + reaction.getGraveId() + "/" + reaction.getReactionId() ).toFile()  );
+        deleteDirectory( Paths.get(herdenkConfig.getUploads() + reaction.getGraveId()  + "/" + reaction.getReactionId() ).toFile()  );
 
         return reactions;
     }
 
 
     boolean deleteDirectory( File directoryToBeDeleted ){
+        System.out.println( "Deleting " + directoryToBeDeleted.toString() + " exists? " + directoryToBeDeleted.exists() );
 
         File[] allContents = directoryToBeDeleted.listFiles();
         if (allContents != null) {
@@ -110,22 +119,39 @@ public class ReactionService {
         return directoryToBeDeleted.delete();
     }
 
-    public List<Reaction>  findPermissionQuestions( Long graveId ) {
+    public List<Reaction>  findPermissionQuestions( Long graveId) {
         List<Reaction> reactions;
-        try {
-            reactions = reactionRepository.findReactionsByGraveIdAndType( graveId, "PERMISSION");
-        }catch(Exception e ){
-            throw new FileNotFoundException( "No permission questions found for grave " + graveId);
-        }
-        return  reactions;
+
+        reactions = findReactionType(graveId, "WRITE" );
+        reactions.addAll( findReactionType(graveId, "READ" ));
+
+        return reactions;
     }
 
-    public List<Reaction>  askPermission( Long graveId, String permission) {
-        String userEmail = authorityService.getCurrentUser();
-        User user = userService.getUserByEmail( userEmail );
 
-        if ( !permission.equals(Access.READ.name()) && !permission.equals( Access.WRITE.name()) ){
-            throw new BadRequestException("Permission must be either " + Access.READ.name() + " or " + Access.WRITE.name() );
+    public List<Reaction> findReactionType(Long graveId, String type) {
+        List<Reaction> reactions;
+
+        reactions = reactionRepository.findReactionsByGraveIdAndType(graveId, type);
+
+        return reactions;
+    }
+
+    public List<Reaction>  addReactionType( Long graveId, String type) {
+
+        String [] permittedTypes = {"READ","WRITE","FLOWER","TEAR"};
+        List<String>  checkTypeList = Arrays.asList( permittedTypes );
+
+        if ( !checkTypeList.contains( type  ) ){
+            throw new BadRequestException( "Unknown reaction type, should be one of "+ Arrays.toString( permittedTypes) );
+        }
+
+        User user;
+        try {
+            String userEmail = authorityService.getCurrentUser();
+            user = userService.getUserByEmail(userEmail);
+        }catch( Exception e ){
+            throw new BadRequestException("User not found" );
         }
 
         Grave grave;
@@ -137,24 +163,58 @@ public class ReactionService {
 
         Reaction reaction = new Reaction();
 
-        StringBuilder textBuilder = new StringBuilder();
-        textBuilder.append( "User ");
-        textBuilder.append(  user.getFullName() );
-        textBuilder.append( " with email " + user.getEmail() + " " );
-        textBuilder.append( "wants " + permission + " access ");
-        textBuilder.append( "to the grave of " + grave.getOccupantFullName() + ".");
+        if ( type.equals("READ") || type.equals("WRITE") ) {
+            StringBuilder textBuilder = new StringBuilder();
+            textBuilder.append("User ");
+            textBuilder.append(user.getFullName());
+            textBuilder.append(" with email " + user.getEmail() + " ");
+            textBuilder.append("wants " + type + " access ");
+            textBuilder.append("to the grave of " + grave.getOccupantFullName() + ".");
+            reaction.setType( type );
+            reaction.setText(textBuilder.toString());
+        }
 
-        reaction.setType("PERMISSION");
+        if ( type.equals("FLOWER") || type.equals("TEAR") ) {
+            reaction.setType( type );
+            reaction.setText( user.getFullName() +  " shared a " + type );
+        }
+
         reaction.setGraveId( graveId);
         reaction.setUserId( user.getUserId() );
         reaction.setUserName( user.getFullName() );
-        reaction.setText( textBuilder.toString() );
 
         reaction = reactionRepository.save( reaction );
 
         List<Reaction> reactions = new ArrayList<>();
         reactions.add( reaction);
 
+        return reactions;
+    }
+
+    public List<Reaction> updateReaction(Reaction reaction, MultipartFile multipartFile) {
+        Reaction oldReaction;
+        try {
+            oldReaction = reactionRepository.getById(reaction.getReactionId());
+        }catch( Exception e ){
+            throw new FileNotFoundException( " Reacttion not found, cannot be updated" );
+        }
+
+
+        if ( multipartFile != null  ){
+            if ( oldReaction.getType().equals("MEDIA") )deleteDirectory( Paths.get(herdenkConfig.getUploads() + oldReaction.getGraveId() + "/" + oldReaction.getReactionId() ).toFile()  );
+            try {
+                oldReaction = saveMediaFile( oldReaction, multipartFile);
+            } catch (Exception e) {
+                throw new BadRequestException(e.getMessage());
+            }
+            oldReaction.setType("MEDIA");
+        }
+
+        oldReaction.setText(reaction.getText());
+        oldReaction = reactionRepository.save( oldReaction );
+
+        List<Reaction> reactions = new ArrayList<>();
+        reactions.add( oldReaction);
         return reactions;
     }
 

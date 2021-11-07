@@ -1,5 +1,6 @@
 package org.peut.herdenk.security;
 
+import org.peut.herdenk.model.Reaction;
 import org.peut.herdenk.model.User;
 import org.peut.herdenk.service.AuthorityService;
 import org.peut.herdenk.service.ReactionService;
@@ -73,17 +74,18 @@ public class AccessBeans {
         return authorityService.isGraveAccessAtLeast( graveId, Access.OWNER.name() );
     }
 
-    public boolean isGraveOwnerOrAuthor( Long graveId, Long reactionId ){
+    public boolean isGraveOwnerOrAuthor( Long reactionId ){
 
-        if ( authorityService.isGraveAccessAtLeast( graveId, Access.OWNER.name() ) ) return true;
-
-        Long userId;
+        Reaction reaction;
         try {
-            userId = reactionService.getReaction(reactionId).getUserId();
+            reaction = reactionService.getReaction(reactionId);
         }catch( Exception e ){
             return false;
         }
-        return isSelfOrIsAdmin( userId ) ;
+
+        if ( authorityService.isGraveAccessAtLeast( reaction.getGraveId(), Access.OWNER.name() ) ) return true;
+
+        return isSelfOrIsAdmin( reaction.getUserId() ) ;
     }
 
     private boolean isAdmin() {

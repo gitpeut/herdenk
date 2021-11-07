@@ -38,6 +38,14 @@ public class User {
             fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
 
+    @OneToMany(
+            targetEntity = Reaction.class,
+            mappedBy = "userId",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Reaction> reactions = new ArrayList<>();
+
     public static User from( UserDto userDto){
         User user = new User();
 
@@ -103,4 +111,8 @@ public class User {
     public void setAuthorities(List<Authority> authorities) {
         this.authorities = authorities;
     }
+
+    public List<Reaction> getReactions() { return reactions;}
+
+    public void setReactions(List<Reaction> reactions) {this.reactions = reactions;}
 }
