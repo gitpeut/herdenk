@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping( path = "/api/v1/users")
+// NOT /api/v1/users, as this would make it impossible for new users to register due to
+// tha general antMatcher ruls for .../users in SecurityConfiguration
+@RequestMapping( path = "/api/v1")
 public class UserController {
 
 
@@ -23,7 +25,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping( path="/users" )
     public ResponseEntity<List<UserDto>> getUsers() {
 
         List<User> users = userService.getUsers();
@@ -32,7 +34,7 @@ public class UserController {
         return new ResponseEntity<>(userDtos,HttpStatus.OK);
     }
 
-    @GetMapping( path="/{userId}" )
+    @GetMapping( path="/users/{userId}" )
     public ResponseEntity<UserDto> getUser( @PathVariable("userId") Long userId) {
 
         User user = userService.getUser( userId );
@@ -41,7 +43,7 @@ public class UserController {
         return new ResponseEntity<>(userDto,HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(path="/register")
     public ResponseEntity<UserDto> registerUser(@RequestBody final UserDto userDto){
 
            User user = User.from(userDto);
@@ -50,14 +52,14 @@ public class UserController {
            return new ResponseEntity<>(UserDto.from(user), HttpStatus.OK);
     }
 
-    @PutMapping( path="/{userId}" )
+    @PutMapping( path="/users/{userId}" )
     public ResponseEntity<UserDto> updateUser( @RequestBody final UserDto userDto, @PathVariable("userId") Long userId ){
 
         User user = userService.updateUser( User.from( userDto ), userId );
         return new ResponseEntity<>( UserDto.from( user ), HttpStatus.OK);
     }
 
-    @DeleteMapping( path="/{userId}" )
+    @DeleteMapping( path="/users/{userId}" )
     public ResponseEntity<UserDto> deleteUser( @PathVariable("userId") Long userId ){
         User user = userService.deleteUser( userId );
         return new ResponseEntity<>( UserDto.from( user ), HttpStatus.OK);

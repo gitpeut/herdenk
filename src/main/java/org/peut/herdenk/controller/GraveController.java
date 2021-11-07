@@ -5,6 +5,7 @@ import org.peut.herdenk.model.dto.GraveDto;
 import org.peut.herdenk.model.dto.GraveRegisterDto;
 import org.peut.herdenk.model.dto.GraveSummaryDto;
 import org.peut.herdenk.service.GraveService;
+import org.peut.herdenk.service.ReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,10 +20,12 @@ public class GraveController {
 
 
     private final GraveService graveService;
+    private final ReactionService reactionService;
 
     @Autowired
-    public GraveController(GraveService graveService) {
+    public GraveController(GraveService graveService, ReactionService reactionService) {
         this.graveService = graveService;
+        this.reactionService = reactionService;
     }
 
     @GetMapping

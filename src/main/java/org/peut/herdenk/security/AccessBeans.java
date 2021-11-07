@@ -1,8 +1,8 @@
 package org.peut.herdenk.security;
 
-import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.model.User;
 import org.peut.herdenk.service.AuthorityService;
+import org.peut.herdenk.service.ReactionService;
 import org.peut.herdenk.service.UserService;
 import org.peut.herdenk.utility.Access;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,13 @@ public class AccessBeans {
 
     private final UserService userService;
     private final AuthorityService authorityService;
+    private final ReactionService reactionService;
 
     @Autowired
-    public AccessBeans(UserService userService, AuthorityService authorityService) {
+    public AccessBeans(UserService userService, AuthorityService authorityService, ReactionService reactionService) {
         this.userService = userService;
         this.authorityService = authorityService;
+        this.reactionService = reactionService;
     }
 
 
@@ -71,11 +73,24 @@ public class AccessBeans {
         return authorityService.isGraveAccessAtLeast( graveId, Access.OWNER.name() );
     }
 
+    public boolean isGraveOwnerOrAuthor( Long graveId, Long reactionId ){
+
+        if ( authorityService.isGraveAccessAtLeast( graveId, Access.OWNER.name() ) ) return true;
+
+        Long userId;
+        try {
+            userId = reactionService.getReaction(reactionId).getUserId();
+        }catch( Exception e ){
+            return false;
+        }
+        return isSelfOrIsAdmin( userId ) ;
+    }
+
     private boolean isAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) return false;
         if (authentication.isAuthenticated()) {
-            if ( authentication.getPrincipal().equals("anonymousUser") ) {
+            if ( authentication.getPrincipal().equals("anonymousUser") || authentication.getPrincipal().equals("") ) {
                 return false;
             }
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

@@ -1,8 +1,8 @@
 package org.peut.herdenk.model;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.peut.herdenk.model.dto.GraveDto;
-import org.peut.herdenk.model.dto.ReactionDto;
+import org.peut.herdenk.model.dto.ReactionRequestDto;
+import org.peut.herdenk.model.dto.ReactionResponseDto;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,31 +20,34 @@ public class Reaction {
     @Column
     private Long userId;
 
-    @Column int type;
+    @Column(length = 80)
+    private String userName;
+
+    @Column(length = 16)
+    private String type;
 
     @Column
     @CreationTimestamp
     private Date creationDate;
 
-    @Column(nullable = false, length = 2048)
+    @Column(length = 2048)
     private String text;
 
-    @Column(nullable = false, length = 512)
+    @Column(length = 512)
     private String mediaPath;
 
-    public static Reaction from( ReactionDto reactionDto){
+    // From frontend to app
+    public static Reaction from( ReactionRequestDto reactionRequestDto){
         Reaction reaction = new Reaction();
 
-        reaction.setReactionId(reactionDto.getReactionId());
-        reaction.setGraveId(reactionDto.getGraveId());
-        reaction.setUserId(reactionDto.getUserId());
-        reaction.setType(reactionDto.getType());
-        reaction.setCreationDate( reactionDto.getCreationDate());
-        reaction.setText(reactionDto.getText());
-        reaction.setMediaPath(reactionDto.getMediaPath());
+        reaction.setGraveId(reactionRequestDto.getGraveId());
+        reaction.setType(reactionRequestDto.getType());
+        reaction.setText(reactionRequestDto.getText());
+        reaction.setMediaPath(reactionRequestDto.getMediaPath());
 
         return reaction;
     }
+
 
     public Long getReactionId() {
         return reactionId;
@@ -70,11 +73,11 @@ public class Reaction {
         this.userId = userId;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType( String type) {
         this.type = type;
     }
 
@@ -100,5 +103,13 @@ public class Reaction {
 
     public void setMediaPath(String mediaPath) {
         this.mediaPath = mediaPath;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

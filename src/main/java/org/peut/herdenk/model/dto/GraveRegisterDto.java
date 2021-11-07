@@ -1,10 +1,12 @@
 package org.peut.herdenk.model.dto;
 
 
+import lombok.Data;
 import org.peut.herdenk.model.Grave;
 
 import java.util.Date;
 
+@Data
 public class GraveRegisterDto {
 
 
@@ -20,19 +22,4 @@ public class GraveRegisterDto {
             return graveRegisterDto;
         }
 
-    public String getOccupantFullName() {
-        return occupantFullName;
-    }
-
-    public void setOccupantFullName(String occupantFullName) {
-        this.occupantFullName = occupantFullName;
-    }
-
-    public Boolean getPublicAccess() {
-        return publicAccess;
-    }
-
-    public void setPublicAccess(Boolean publicAccess) {
-        this.publicAccess = publicAccess;
-    }
 }

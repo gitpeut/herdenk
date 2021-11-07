@@ -128,7 +128,12 @@ public class AuthorityService {
     }
 
     public boolean isGraveAccessibleByUser( Long graveId ){
-        Long userId = userService.getUserIdByEmail( getCurrentUser() );
+        Long userId;
+        try {
+            userId = userService.getUserIdByEmail(getCurrentUser());
+        }catch( Exception e ){
+            return false;
+        }
         Optional<Authority> optionalAuthority = authorityRepository.findGraveAccessibleByUserId( userId, graveId );
         return optionalAuthority.isPresent();
     }

@@ -6,3 +6,17 @@ VALUES
 ('user', 'user@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER'),
 ('user2', 'user2@user.com', '$2a$12$Dtb0dxFXvZKK.PbCj1DKm.C9S1IkYtDe7hPyl5xz4YhKOBG3HWnE2', TRUE, 'ROLE_USER');
 
+INSERT INTO graves ( occupant_full_name )
+VALUES
+('Napoleon Bonaparte'),
+('Willem de Zwijger'),
+('Zangeres zonder Naam');
+
+INSERT INTO authorities( user_id, grave_id, authority)
+VALUES
+(2,1,'OWNER'),
+(2,2,'OWNER'),
+(3,3,'OWNER');
+
+
+

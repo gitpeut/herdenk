@@ -19,7 +19,7 @@ public class UserAuthenticateService {
 
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
-    private JwtUtil jwtUtl;
+    private final JwtUtil jwtUtl;
 
     @Autowired
     public UserAuthenticateService(
@@ -35,12 +35,11 @@ public class UserAuthenticateService {
 
     public AuthenticationResponse authenticateUser(AuthenticationRequest authenticationRequest) {
 
-        String username = authenticationRequest.getUsername();
+        String email    = authenticationRequest.getEmail();
         String password = authenticationRequest.getPassword();
 
-
         try {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(username, password);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email, password);
             authenticationManager.authenticate( authentication );
 
         } catch (BadCredentialsException ex) {
@@ -51,7 +50,7 @@ public class UserAuthenticateService {
             throw new RuntimeException("Something went wrong", e);
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String jwt = jwtUtl.generateToken(userDetails);
 
         return new AuthenticationResponse(jwt);
