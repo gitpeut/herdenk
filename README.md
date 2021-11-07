@@ -5,7 +5,7 @@ This repository is the Spring Boot backend for the Herdenk application, a virtua
 It supplies a number of rest endpoints that allow a frontend application to add users, graves
 and reactions. A great effort has been made to ensure the inregrity of the content for each grave.
 
-##Functionality
+## Functionality
 
 Users can register and login. After succesfully registering, a grave can be made and the user becomes 
 owner of this new grave.
@@ -21,9 +21,10 @@ reactions deemed inappropriate. Also he can deny access to any user previously g
 The site admin has unlimited access to all graves and reactions,and can remove graves that
 are deemed inappropriate.
 
-##Installation
+## Installation
 
-###Postgress
+### Postgress
+
 The application uses a Postgress database. An installer for your Operating System can be downloaded 
 from [The postgress website](https://www.postgresql.org/download/).
 A nice installation instruction for Windows can be found [here](https://www.2ndquadrant.com/en/blog/pginstaller-install-postgresql/)
@@ -35,7 +36,7 @@ Then, create a database named "herdenk", create a user for this database, and gr
 all access to the herdenk database. 
 
 
-###Application
+### Application
 
 #### Importing in IDE
 This is a Spring Boot project. To import it, first clone this repository to your own computer.
@@ -55,12 +56,12 @@ Also, decide where the image files uploaded by the users will reside by changing
   # Herdenk reaction media will be uploaded to this directory. Use UNIX directory
   # syntax. On windows / means the root directory of the disk the application is running on.
   herdenk.uploads=/herdenk/media
-
-## Testing
+  
+### Testing
 
 A postman collection is available to test 
 
-## Deployment
+### Deployment
 
 
   
