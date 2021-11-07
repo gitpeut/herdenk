@@ -1,6 +1,6 @@
 # herdenk
 
-This reository is the Spring Boot backend for the Herdenk application, a virtual cemetery.
+This repository is the Spring Boot backend for the Herdenk application, a virtual cemetery.
 
 It supplies a number of rest endpoints that allow a frontend application to add users, graves
 and reactions. A great effort has been made to ensure the inregrity of the content for each grave.
