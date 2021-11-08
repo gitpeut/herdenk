@@ -29,7 +29,7 @@ public class ReactionController {
         this.reactionService = reactionService;
     }
 
-    @GetMapping
+    @GetMapping(path = "/all" )
     public ResponseEntity<List<ReactionResponseDto>> getReactions() {
 
         return new ResponseEntity<>( reactionService.getReactions()

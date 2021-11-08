@@ -25,7 +25,7 @@ public class AuthorityController {
         this.authorityService = authorityService;
     }
 
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<AuthorityDto>> getAuthorities() {
 
         List<Authority>  authorities = authorityService.getAuthorities();

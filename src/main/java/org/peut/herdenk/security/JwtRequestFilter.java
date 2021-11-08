@@ -1,6 +1,7 @@
 package org.peut.herdenk.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +25,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    public JwtRequestFilter( UserDetailsService userDetailsService, JwtUtil jwtUtil){
-        this.userDetailsService = userDetailsService;
+    public JwtRequestFilter( JwtUtil jwtUtil){
         this.jwtUtil = jwtUtil;
+    }
+
+    public void setUserDetailsService(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -45,7 +49,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if( username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
 
@@ -59,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 System.out.println("Token invalid");
             }
         }
-        System.out.println("Response status : " + response.getStatus());
+
         filterChain.doFilter(request, response);
 
     }

@@ -28,7 +28,7 @@ public class GraveController {
         this.reactionService = reactionService;
     }
 
-    @GetMapping
+    @GetMapping(path = "/all")
     public ResponseEntity<List<GraveDto>> getGraves() {
 
         List<Grave>  graves = graveService.getGraves();
