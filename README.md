@@ -52,11 +52,29 @@ Then open in your IDE the file ...src/main/resources/application.properties and 
   spring.datasource.password=<The password of this user>
 ```
 
-Also, decide where the image files uploaded by the users will reside by changing this variable
+Also, decide where the image files uploaded by the users will reside and decide howmany hours
+a JWT token will be valid.
+
 ```
-  # Herdenk reaction media will be uploaded to this directory. Use UNIX directory
-  # syntax. On windows / means the root directory of the disk the application is running on.
-  herdenk.uploads=/herdenk/media
+# Herdenk reaction media will be uploaded to this directory. Use UNIX directory
+# syntax. On windows / means the root directory of the disk the application is running on.
+herdenk.uploads=/herdenk/media
+
+# The number of hours before the JWT token expires and users have to
+# login again using their email/password
+herdenk.jwtexpiration=480
+
+```
+You may also want to change the port the application can be access. In that case, also change
+```
+server.port=40545
+'''
+
+Optionally you can limit the size of the files that are uploaded by the users. In the supplied 
+application properties this is :
+```
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=10MB
 ```
 
 ### Testing
