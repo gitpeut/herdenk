@@ -3,6 +3,8 @@ package org.peut.herdenk.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.peut.herdenk.config.HerdenkConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,13 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
 
-    private final static String SECRET_KEY = "secret";
+    private final HerdenkConfig herdenkConfig;
+    @Autowired
+    public JwtUtil(HerdenkConfig herdenkConfig){
+        this.herdenkConfig = herdenkConfig;
+    }
+
+    private final static String SECRET_KEY = "WinterIsAlreadyHere";
 
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -43,7 +51,7 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        long validPeriod = 1000 * 60 * 60 * 24 * 7;   // a week
+        long validPeriod = herdenkConfig.getJwtexpiration() * 3600;//1000 * 60 * 60 * 24 * 7;   // a week
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)

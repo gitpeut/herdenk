@@ -25,22 +25,24 @@ import static org.springframework.http.HttpMethod.GET;
 @EnableGlobalMethodSecurity( prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
-    private final JwtRequestFilter jwtRequestFilter;
-
+    private JwtRequestFilter jwtRequestFilter;
 
     @Autowired
     SecurityConfiguration(DataSource dataSource, JwtRequestFilter jwtRequestFilter) {
         this.dataSource = dataSource;
         this.jwtRequestFilter = jwtRequestFilter;
+
     }
+
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .usersByUsernameQuery("SELECT email, password, enabled FROM users WHERE email=?")
-                .authoritiesByUsernameQuery("select email, role from users where email = ?");
+                .authoritiesByUsernameQuery("SELECT email, role FROM users where email = ?");
+
+        jwtRequestFilter.setUserDetailsService( userDetailsService());
     }
 
     @Bean
@@ -60,6 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return super.userDetailsServiceBean();
     }
 
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -72,21 +76,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(       "/media**").fullyAuthenticated()
                 .antMatchers(       "/api/v1/login").permitAll()
                 .antMatchers(       "/api/v1/register").permitAll()
-                .antMatchers(GET,   "/api/v1/users").hasRole("ADMIN")
+                .antMatchers(GET,   "/api/v1/users/all").hasRole("ADMIN")
+                .antMatchers(DELETE,   "/api/v1/users/{userId}").hasRole("ADMIN")
                 .antMatchers(GET,   "/api/v1/users/{userId}").access("@AccessBeans.isSelfOrIsAdmin( #userId )")
                 .antMatchers(PUT,   "/api/v1/users/{userId}").access("@AccessBeans.isSelfOrIsAdmin( #userId )")
-                .antMatchers(GET,   "/api/v1/graves").hasRole( "ADMIN" )
+                .antMatchers(GET,   "/api/v1/graves/all").hasRole( "ADMIN" )
                 .antMatchers(GET,   "/api/v1/graves/summary").permitAll()
                 .antMatchers(GET,   "/api/v1/graves/{graveId}").access( "@AccessBeans.hasGraveAccessOrIsAdmin( #graveId )")
                 .antMatchers(PUT,   "/api/v1/graves/{graveId}").access( "@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(DELETE,"/api/v1/graves/{graveId}").access( "@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
-                .antMatchers(GET,   "/api/v1/authorities").hasRole("ADMIN")
+                .antMatchers(GET,   "/api/v1/authorities/all").hasRole("ADMIN")
                 .antMatchers(GET,   "/api/v1/authorities/user/{userId}").access("@AccessBeans.isSelfOrIsAdmin( #userId )")
                 .antMatchers(GET,   "/api/v1/authorities/grave/{graveId}").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(DELETE,"/api/v1/authorities/{UserId}/{graveId}").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(POST,  "/api/v1/authorities/grave/{graveId}/**").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(PUT,   "/api/v1/authorities/grave/{graveId}/**").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
-                .antMatchers(GET,   "/api/v1/reactions/").hasRole("ADMIN")
+                .antMatchers(GET,   "/api/v1/reactions/all").hasRole("ADMIN")
                 .antMatchers(GET,   "/api/v1/reactions/grave/{graveId}").access("@AccessBeans.hasGraveAccessOrIsAdmin( #graveId )")
                 .antMatchers(GET,   "/api/v1/reactions/user/{userId}").access("@AccessBeans.isSelfOrIsAdmin( #userId )")
                 .antMatchers(POST,  "/api/v1/reactions/grave/{graveId}").access("@AccessBeans.hasAtLeastWriteAccess( #graveId )")
@@ -104,7 +109,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore( jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }

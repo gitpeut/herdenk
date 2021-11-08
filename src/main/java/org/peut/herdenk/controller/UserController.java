@@ -25,7 +25,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping( path="/users" )
+    @GetMapping( path="/users/all" )
     public ResponseEntity<List<UserDto>> getUsers() {
 
         List<User> users = userService.getUsers();

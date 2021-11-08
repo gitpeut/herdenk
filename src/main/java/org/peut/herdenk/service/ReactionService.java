@@ -196,7 +196,7 @@ public class ReactionService {
         try {
             oldReaction = reactionRepository.getById(reaction.getReactionId());
         }catch( Exception e ){
-            throw new FileNotFoundException( " Reacttion not found, cannot be updated" );
+            throw new FileNotFoundException( " Reaction not found, cannot be updated" );
         }
 
 

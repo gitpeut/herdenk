@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+
 @Component(value="AccessBeans")
 public class AccessBeans {
 
@@ -88,7 +89,7 @@ public class AccessBeans {
         return isSelfOrIsAdmin( reaction.getUserId() ) ;
     }
 
-    private boolean isAdmin() {
+    public boolean isAdmin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) return false;
         if (authentication.isAuthenticated()) {
