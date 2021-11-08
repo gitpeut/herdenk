@@ -2,6 +2,7 @@ package org.peut.herdenk.service;
 
 import org.peut.herdenk.config.HerdenkConfig;
 import org.peut.herdenk.exceptions.BadRequestException;
+import org.peut.herdenk.exceptions.DuplicateException;
 import org.peut.herdenk.exceptions.FileNotFoundException;
 import org.peut.herdenk.model.Grave;
 import org.peut.herdenk.model.Reaction;
@@ -164,6 +165,15 @@ public class ReactionService {
         Reaction reaction = new Reaction();
 
         if ( type.equals("READ") || type.equals("WRITE") ) {
+
+            List<Reaction> existingPermissions = findPermissionQuestions( graveId );
+            for( Reaction r : existingPermissions ){
+                if ( r.getUserId() == user.getUserId() &&
+                        ( r.getType().equals("READ") || r.getType().equals("WRITE") )  ){
+                    throw new DuplicateException("An applicaton to access grave " + grave.getOccupantFullName() + " by " + user.getFullName() + " is already active");
+                }
+            }
+
             StringBuilder textBuilder = new StringBuilder();
             textBuilder.append("User ");
             textBuilder.append(user.getFullName());

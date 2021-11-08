@@ -1,0 +1,1113 @@
+{
+	"info": {
+		"_postman_id": "0f857e26-f399-4c14-8993-af948d0dde7b",
+		"name": "herdenk",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\"     : \"admin@admin.com\",\r\n    \"password\"  : \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				},
+				"description": "At login, supply an email address and a passowrd in the body.\nA JWT token is returned. This token should be used for subsequent \nrequests as bearer token."
+			},
+			"response": []
+		},
+		{
+			"name": "get users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/users/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get one user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/users/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"3"
+					]
+				},
+				"description": "The last number in the URI path is the user number."
+			},
+			"response": []
+		},
+		{
+			"name": "registerUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\" :\"Peut\",\r\n    \"password\" :\"#@%Onwaarchijnlijk!\",\r\n    \"email\" : \"peut@peut.org\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/users/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \r\n    \"password\" :\"#@ZinlozeWillekeur\",\r\n    \"email\" : \"peut@peut.org\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/users/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register Grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"occupantFullName\" : \"Wim Wandkast4\",\r\n    \"publicAccess\"   : false   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get graves",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get graves summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get one grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get authorities",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get authorities for user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/user/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"user",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get authorities for grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/grave/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"grave",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete authority for user/grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/4/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"4",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add authority for /grave/user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/grave/3/5/WRITE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"grave",
+						"3",
+						"5",
+						"WRITE"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change authority for /graveid/userid/read",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "javascript"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/grave/3/4/OWNER",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"grave",
+						"3",
+						"4",
+						"OWNER"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post media reaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "Dit is het graf van WIllen Wandkast. ",
+							"contentType": "text/plain",
+							"type": "text"
+						},
+						{
+							"key": "media",
+							"type": "file",
+							"src": "/Z:/Jose/Pictures/PeutenNaamplaatjeBWPiepklein.png"
+						},
+						{
+							"key": "reaction",
+							"value": "{ \"graveId\": 3, \"text\": \"Dit is het graf van de Zangeres zonder Naam\",\"mediaPath\": \"\"}",
+							"contentType": "application/json",
+							"description": "{ \"graveId\": 3, \"TEXT\", \"Dit is hetgraf van WIllem Wandkast\",\"\"}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/reactions/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post text reaction",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "Dit is het graf van WIllen Wandkast. ",
+							"contentType": "text/plain",
+							"type": "text"
+						},
+						{
+							"key": "reaction",
+							"value": "{ \"graveId\": 3, \"text\": \"Dit is het graf van de Zangeres zonder Naam\",\"mediaPath\": \"\"}",
+							"contentType": "application/json",
+							"description": "{ \"graveId\": 3, \"TEXT\", \"Dit is hetgraf van WIllem Wandkast\",\"\"}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/reactions/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update text in text reaction 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "Dit is het graf van WIllen Wandkast. ",
+							"contentType": "text/plain",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "reaction",
+							"value": "{ \"graveId\": 3, \"text\": \"Dit is het graf van de Zangeres met een Naam\",\"mediaPath\": \"\"}",
+							"contentType": "application/json",
+							"description": "{ \"graveId\": 3, \"TEXT\", \"Dit is hetgraf van WIllem Wandkast\",\"\"}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/reactions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update text in text en media van reaction 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "text",
+							"value": "Dit is het graf van WIllen Wandkast. ",
+							"contentType": "text/plain",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "reaction",
+							"value": "{ \"graveId\": 3, \"text\": \"Dit is het graf van de Zangeres met een Naam\",\"mediaPath\": \"\"}",
+							"contentType": "application/json",
+							"description": "{ \"graveId\": 3, \"TEXT\", \"Dit is hetgraf van WIllem Wandkast\",\"\"}",
+							"type": "text"
+						},
+						{
+							"key": "media",
+							"type": "file",
+							"src": "/Z:/Jose/Pictures/PeutenLogo/kleinvisje.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/reactions/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get reactions",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/all",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete reaction 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/1",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get reactions for grave 3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/3",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get reactions for user 3",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/3",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get media for grave 3 reactionId 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/media/3/1/PeutenNaamplaatjeBWPiepklein.png",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"media",
+						"3",
+						"1",
+						"PeutenNaamplaatjeBWPiepklein.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ask read permission to access grave 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/permission/1/READ",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"permission",
+						"1",
+						"READ"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find permission reactions for grave 1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/media/3/1/PeutenNaamplaatjeBWPiepklein.png",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"media",
+						"3",
+						"1",
+						"PeutenNaamplaatjeBWPiepklein.png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Put flowers at grave 4",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/token/4/flower",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"token",
+						"4",
+						"flower"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get flowers or tears from grave 4",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/token/4/flower",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"token",
+						"4",
+						"flower"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "userJWT",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQHVzZXIuY29tIiwiZXhwIjoxNjM2MzA4NDkzLCJpYXQiOjE2MzU3MDM2OTN9.EOJNhC137Walps5dBHj0FiPe4JlmVn_6pCHj571l-hc"
+		},
+		{
+			"key": "adminJWT",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJleHAiOjE2MzYyNDc1NTAsImlhdCI6MTYzNTY0Mjc1MH0._wVuzGwy5yv5ntcIDpMUuN_HknKDhUQXee5jhqRnZi0"
+		},
+		{
+			"key": "user2JWT",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMkB1c2VyLmNvbSIsImV4cCI6MTYzNjk0Mzk5MCwiaWF0IjoxNjM2MzM5MTkwfQ.6G2Z6-46SGlF1bD5Sz0Aa2dkSbNVlNAYf87nD9OPygo"
+		}
+	]
+}

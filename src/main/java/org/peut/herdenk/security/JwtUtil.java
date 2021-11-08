@@ -51,7 +51,8 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        long validPeriod = herdenkConfig.getJwtexpiration() * 3600;//1000 * 60 * 60 * 24 * 7;   // a week
+
+        long validPeriod = herdenkConfig.getJwtexpiration() * 36000;//validPeriod in milliseconds
         long currentTime = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)

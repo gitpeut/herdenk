@@ -31,6 +31,7 @@ public class MediaController {
     }
 
     public Resource loadFileAsResource(String fileName) {
+        System.out.println("Finding " + fileName);
         try {
             Resource resource = new FileSystemResource(fileName);
             if( resource.exists() ) {
