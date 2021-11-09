@@ -162,5 +162,5 @@ see [Herdenk-Api-Endpoints.pdf](Herdenk-api-endpoints.pdf)
 #Appendix B
 ## Endpoint authorisation
 
-see [End point authorisation]()
+see [End point authorisation](Endpoint%20security%20configuration%20Herdenk%20V1.1.pdf)
 
