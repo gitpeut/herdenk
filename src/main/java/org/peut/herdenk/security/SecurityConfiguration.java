@@ -104,7 +104,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(       "/media/{graveId}/**").access("@AccessBeans.hasGraveAccessOrIsAdmin( #graveId )")
                 .anyRequest().denyAll()
                 .and()
-                .csrf().disable()
+                .csrf(csrf -> csrf.disable() )
                 .formLogin().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

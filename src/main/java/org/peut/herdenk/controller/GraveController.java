@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( path = "/api/v1/graves")
+@CrossOrigin(origins = "*")
 public class GraveController {
 
 

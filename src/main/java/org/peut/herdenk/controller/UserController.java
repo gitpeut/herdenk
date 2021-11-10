@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 // NOT /api/v1/users, as this would make it impossible for new users to register due to
 // tha general antMatcher ruls for .../users in SecurityConfiguration
 @RequestMapping( path = "/api/v1")
+@CrossOrigin(origins = "*")
 public class UserController {
 
 

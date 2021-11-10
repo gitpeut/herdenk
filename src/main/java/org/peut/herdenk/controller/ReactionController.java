@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( path = "/api/v1/reactions")
+@CrossOrigin(origins = "*")
 public class ReactionController {
 
     private final ReactionService reactionService;

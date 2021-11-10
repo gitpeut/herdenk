@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping( path = "/api/v1/authorities")
+@CrossOrigin(origins = "*")
 public class AuthorityController {
 
     private final AuthorityService authorityService;
