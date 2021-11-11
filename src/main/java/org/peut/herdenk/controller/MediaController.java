@@ -43,6 +43,7 @@ public class MediaController {
     }
 
     @GetMapping( path="/{graveId}/{reactionId}/{fileName}" )
+    @CrossOrigin(origins = "*")
     public ResponseEntity<Resource> downloadMedia(@PathVariable("graveId") Integer graveId,
                                                   @PathVariable("reactionId") Integer reactionId,
                                                   @PathVariable("fileName") String fileName){

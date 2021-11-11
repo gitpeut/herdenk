@@ -23,6 +23,7 @@ public class UserDto {
     private String  password;
     private String  role;
     private List<AuthorityDto> authorities;
+    private List<ReactionResponseDto> reactions;
 
     public static UserDto from(User user){
         UserDto userDto = new UserDto();
@@ -35,6 +36,9 @@ public class UserDto {
         userDto.setRole( user.getRole());
         if (Objects.nonNull( user.getAuthorities() )){
             userDto.setAuthorities( user.getAuthorities().stream().map(AuthorityDto::from).collect(Collectors.toList() ));
+        }
+        if (Objects.nonNull( user.getReactions() )){
+            userDto.setReactions( user.getReactions().stream().map(ReactionResponseDto::from).collect(Collectors.toList() ));
         }
         return userDto;
     }

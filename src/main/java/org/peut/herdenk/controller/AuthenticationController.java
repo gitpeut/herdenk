@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     UserAuthenticateService userAuthenticateService;
@@ -22,6 +21,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(value = "/api/v1/login")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
 
         AuthenticationResponse authenticationResponse = userAuthenticateService.authenticateUser(authenticationRequest);
