@@ -32,6 +32,8 @@ public class AccessBeans {
     public boolean isSelfOrIsAdmin( Long userId ){
 
         User   registeredUser;
+        if ( isAdmin() ) return  true;
+
         try {
             registeredUser = userService.getUser(userId);
         }catch( Exception e ){
@@ -41,7 +43,6 @@ public class AccessBeans {
         String pathUser = registeredUser.getEmail();
         String username = "";
 
-        if ( isAdmin() ) return  true;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -94,6 +95,7 @@ public class AccessBeans {
         if (authentication == null) return false;
         if (authentication.isAuthenticated()) {
             if ( authentication.getPrincipal().equals("anonymousUser") || authentication.getPrincipal().equals("") ) {
+                System.out.println("isAdmin found user to Anonymous user");
                 return false;
             }
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

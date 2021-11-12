@@ -69,6 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
+                .antMatchers(OPTIONS, "/**").permitAll()
                 .antMatchers(       "/api/v1/authorities**").fullyAuthenticated()
                 .antMatchers(       "/api/v1/graves**").fullyAuthenticated()
                 .antMatchers(       "/api/v1/users**").fullyAuthenticated()
@@ -76,7 +77,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(       "/media**").fullyAuthenticated()
                 .antMatchers(       "/api/v1/login").permitAll()
                 .antMatchers(       "/api/v1/register").permitAll()
-                .antMatchers(OPTIONS, "/**").permitAll()
                 .antMatchers(GET,   "/api/v1/users/all").hasRole("ADMIN")
                 .antMatchers(GET, "/api/v1/users/me").fullyAuthenticated()
                 .antMatchers(DELETE,   "/api/v1/users/{userId}").hasRole("ADMIN")
