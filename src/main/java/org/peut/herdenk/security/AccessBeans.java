@@ -95,7 +95,7 @@ public class AccessBeans {
         if (authentication == null) return false;
         if (authentication.isAuthenticated()) {
             if ( authentication.getPrincipal().equals("anonymousUser") || authentication.getPrincipal().equals("") ) {
-                System.out.println("isAdmin found user to Anonymous user");
+                System.out.println("isAdmin found user to Anonymous user " + authentication.getPrincipal() );
                 return false;
             }
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
