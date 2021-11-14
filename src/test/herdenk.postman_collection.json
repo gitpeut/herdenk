@@ -102,6 +102,39 @@
 			"response": []
 		},
 		{
+			"name": "Get  me",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/users/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"users",
+						"3"
+					]
+				},
+				"description": "The last number in the URI path is the user number."
+			},
+			"response": []
+		},
+		{
 			"name": "registerUser",
 			"request": {
 				"method": "POST",
