@@ -3,6 +3,7 @@ package org.peut.herdenk.repository;
 import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.AuthorityKey;
 
+import org.peut.herdenk.model.projection.AuthorityByGraveWithNames;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -28,5 +29,6 @@ public interface AuthorityRepository extends JpaRepository<Authority, AuthorityK
     Optional<Authority> findGraveAccessibleByUserId( Long userId, Long graveId );
 
 
-
+    @Query("select a.graveId as graveId,  g.occupantFullName as occupantFullName,  u.fullName as userFullName,  a.authority as access  from Authority a  join User u on u.userId = a.userId  join Grave g on g.graveId = a.graveId  where  a.graveId = ?1")
+    List<AuthorityByGraveWithNames> findAuthorityByGraveWithNames(Long graveId );
 }

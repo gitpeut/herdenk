@@ -89,6 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(DELETE,"/api/v1/graves/{graveId}").access( "@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(GET,   "/api/v1/authorities/all").hasRole("ADMIN")
                 .antMatchers(GET,   "/api/v1/authorities/user/{userId}").access("@AccessBeans.isSelfOrIsAdmin( #userId )")
+                .antMatchers(GET,   "/api/v1/authorities/grave/{graveId}/names").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(GET,   "/api/v1/authorities/grave/{graveId}").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(DELETE,"/api/v1/authorities/{UserId}/{graveId}").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")
                 .antMatchers(POST,  "/api/v1/authorities/grave/{graveId}/**").access("@AccessBeans.hasAtLeastOwnerAccess( #graveId )")

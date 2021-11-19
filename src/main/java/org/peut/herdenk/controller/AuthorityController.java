@@ -3,7 +3,9 @@ package org.peut.herdenk.controller;
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.AuthorityKey;
+import org.peut.herdenk.model.dto.AuthorityByGraveWithNamesDto;
 import org.peut.herdenk.model.dto.AuthorityDto;
+import org.peut.herdenk.model.projection.AuthorityByGraveWithNames;
 import org.peut.herdenk.service.AuthorityService;
 import org.peut.herdenk.utility.Access;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,14 @@ public class AuthorityController {
         return new ResponseEntity<>(authorityDtos,HttpStatus.OK);
 
     }
+
+    @GetMapping( path="/grave/{graveId}/names" )
+    public ResponseEntity<List<AuthorityByGraveWithNames>> getAuthoritiesForGraveWithNames(
+            @PathVariable("graveId") Long graveId  )
+    {
+        return new ResponseEntity<>( authorityService.getAuthoritiesByGraveWithNames( graveId),HttpStatus.OK);
+    }
+
 
     @PostMapping(path = "/grave/{graveId}/{userId}/{access}" )
     public ResponseEntity<AuthorityDto> registerAuthority(

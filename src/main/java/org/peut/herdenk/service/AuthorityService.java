@@ -4,6 +4,8 @@ import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.DuplicateException;
 import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.AuthorityKey;
+import org.peut.herdenk.model.dto.AuthorityByGraveWithNamesDto;
+import org.peut.herdenk.model.projection.AuthorityByGraveWithNames;
 import org.peut.herdenk.repository.AuthorityRepository;
 import org.peut.herdenk.utility.Access;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,10 @@ public class AuthorityService {
 
     public List<Authority> getAuthoritiesByGrave(Long graveId) {
         return authorityRepository.findAllByGraveId(graveId);
+    }
+
+    public List<AuthorityByGraveWithNames> getAuthoritiesByGraveWithNames(Long graveId){
+        return authorityRepository.findAuthorityByGraveWithNames(graveId);
     }
 
 
