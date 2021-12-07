@@ -180,14 +180,6 @@ public class ReactionService {
             reaction.setType( type );
             reaction.setText( text );
 
-//            StringBuilder textBuilder = new StringBuilder();
-//            textBuilder.append("User ");
-//            textBuilder.append(user.getFullName());
-//            textBuilder.append(" with email " + user.getEmail() + " ");
-//            textBuilder.append("wants " + type + " access ");
-//            textBuilder.append("to the grave of " + grave.getOccupantFullName() + ".");
-//            reaction.setType( type );
-//            reaction.setText(textBuilder.toString());
         }
 
         if ( type.equals("FLOWER") || type.equals("TEAR") ) {
@@ -243,8 +235,12 @@ public class ReactionService {
         return reactions;
     }
 
-    public List<Reaction> registerReaction(Reaction reaction, MultipartFile multipartFile) {
+    public List<Reaction> registerReaction(Long graveId, Reaction reaction, MultipartFile multipartFile) {
         Reaction fullReaction;
+
+        if ( !Objects.equals( graveId, reaction.getGraveId() ) ){
+            throw new DuplicateException( "graveId in URI does not match graveId in reaction");
+        }
 
         String userEmail = authorityService.getCurrentUser();
         User   user = userService.getUserByEmail( userEmail );

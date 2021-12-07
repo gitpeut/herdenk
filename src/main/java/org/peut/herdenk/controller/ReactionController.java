@@ -68,6 +68,7 @@ public class ReactionController {
         Reaction reaction = Reaction.from( request );
 
         return new ResponseEntity<>( reactionService.registerReaction(
+                graveId,
                 reaction,
                 multipartFile)
                 .stream()

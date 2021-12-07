@@ -119,7 +119,7 @@ public class AuthorityService {
             authority = getAuthority(authorityKey);
             userId = userService.getUserIdByEmail( getCurrentUser() );
         }catch( Exception e){
-            throw new BadRequestException( e.getMessage() );
+            throw new BadRequestException( e );
         }
         if ( Objects.equals(authorityKey.getUserId(), userId) ){
             throw new BadRequestException("Toegang van jezelf kan niet worden verwijderd");
