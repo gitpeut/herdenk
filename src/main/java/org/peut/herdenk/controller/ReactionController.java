@@ -133,7 +133,7 @@ public class ReactionController {
     public ResponseEntity<List<ReactionResponseDto>> sendToken(
             @PathVariable("graveId") Long graveId,
             @PathVariable("token")String token){
-        return new ResponseEntity<>( reactionService. addReactionType( graveId, token.toUpperCase() )
+        return new ResponseEntity<>( reactionService.addReactionType( graveId, token.toUpperCase() )
                 .stream()
                 .map( (ReactionResponseDto::from) )
                 .collect( Collectors.toList()) ,

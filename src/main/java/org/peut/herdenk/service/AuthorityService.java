@@ -4,9 +4,9 @@ import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.DuplicateException;
 import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.AuthorityKey;
-import org.peut.herdenk.model.dto.AuthorityByGraveWithNamesDto;
 import org.peut.herdenk.model.projection.AuthorityByGraveWithNames;
 import org.peut.herdenk.repository.AuthorityRepository;
+import org.peut.herdenk.security.RoleBeans;
 import org.peut.herdenk.utility.Access;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -21,14 +22,17 @@ public class AuthorityService {
 
     private final AuthorityRepository authorityRepository;
     private final UserService userService;
+    private final RoleBeans roleBeans;
 
     @Autowired
     public AuthorityService(
             AuthorityRepository authorityRepository,
-            UserService userService)
+            UserService userService,
+            RoleBeans roleBeans)
     {
         this.authorityRepository = authorityRepository;
         this.userService = userService;
+        this.roleBeans = roleBeans;
     }
 
     public List<Authority> getAuthorities(){
@@ -94,7 +98,7 @@ public class AuthorityService {
                 if ( optionalOwners.isPresent() ) {
                     List<Authority> owners = optionalOwners.get();
                     if (owners.size() == 1) {
-                        throw new BadRequestException( "Grave must have at least owner, you cannot delete the only owner");
+                        throw new BadRequestException( "Grave must have at least one owner, you cannot delete the only owner");
                     }
                 }
         }
@@ -117,10 +121,18 @@ public class AuthorityService {
         }catch( Exception e){
             throw new BadRequestException( e.getMessage() );
         }
-        if ( authorityKey.getUserId().equals(userId) ){
-            throw new BadRequestException("Cannot delete one's own OWNER authority");
+        if ( Objects.equals(authorityKey.getUserId(), userId) ){
+            throw new BadRequestException("Toegang van jezelf kan niet worden verwijderd");
         }
-        authorityRepository.delete( authority );
+
+        List<Authority> owners = authorityRepository.findGraveOwners( authorityKey.getGraveId() );
+        if ( owners.size() > 1 || !authority.getAuthority().equals( Access.OWNER.name() )  ) {
+            authorityRepository.delete(authority);
+            System.out.println(" delete auth for user " + authorityKey.getUserId() + " graveId " + authority.getGraveId() );
+
+        }else{
+            throw new BadRequestException( "Onmogelijk de enige eigenaar van een graf te verwijderen");
+        }
         return( authority);
     }
 
@@ -135,6 +147,9 @@ public class AuthorityService {
 
     public boolean isGraveAccessibleByUser( Long graveId ){
         Long userId;
+
+        if (roleBeans.isAdmin()) return true;
+
         try {
             userId = userService.getUserIdByEmail(getCurrentUser());
         }catch( Exception e ){
@@ -145,9 +160,13 @@ public class AuthorityService {
     }
 
     public String getGraveUserAccess( Long graveId ){
+
+        if (roleBeans.isAdmin()) return Access.OWNER.name();
+
         Long userId = userService.getUserIdByEmail( getCurrentUser() );
         String access = Access.NONE.name();
         AuthorityKey key = new AuthorityKey(userId, graveId);
+
 
         if ( isGravePublic( graveId ) ) {
             access = Access.PUBLIC.name();
@@ -165,6 +184,9 @@ public class AuthorityService {
 
     public boolean isGraveAccessAtLeast( Long graveId, String access){
         Long userId;
+
+        if (roleBeans.isAdmin()) return true;
+
         try {
             userId = userService.getUserIdByEmail(getCurrentUser());
         }catch( Exception e){
@@ -199,7 +221,7 @@ public class AuthorityService {
         try {
             authorityRepository.save(authority);
         }catch(Exception e){
-            throw new RuntimeException( String.format("Error saving authority %s ", authority ), e );
+            throw new RuntimeException( String.format("Authority %s kon niet worden opgeslagen", authority ), e );
         }
     }
 

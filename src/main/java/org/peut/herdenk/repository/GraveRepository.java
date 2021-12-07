@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface GraveRepository extends JpaRepository<Grave, Long> {
     Optional<Grave> findGraveByOccupantFullName(String occupantFullName);
-
 }

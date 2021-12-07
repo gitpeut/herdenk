@@ -20,8 +20,6 @@ public class Reaction {
     @Column
     private Long userId;
 
-    @Column(length = 80)
-    private String userName;
 
     @Column(length = 16)
     private String type;
@@ -105,11 +103,5 @@ public class Reaction {
         this.mediaPath = mediaPath;
     }
 
-    public String getUserName() {
-        return userName;
-    }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
 }

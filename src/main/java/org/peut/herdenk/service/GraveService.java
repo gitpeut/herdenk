@@ -6,6 +6,9 @@ import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.Grave;
 import org.peut.herdenk.model.dto.GraveSummaryDto;
 import org.peut.herdenk.repository.GraveRepository;
+import org.peut.herdenk.security.AccessBeans;
+import org.peut.herdenk.security.RoleBeans;
+import org.peut.herdenk.utility.Access;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +24,15 @@ public class GraveService {
     private final GraveRepository graveRepository;
     private final AuthorityService authorityService;
 
+
     @Autowired
     public GraveService(
             GraveRepository graveRepository,
-            AuthorityService authorityService )
+            AuthorityService authorityService)
     {
         this.graveRepository = graveRepository;
         this.authorityService = authorityService;
+
     }
 
     public List<Grave> getGraves(){
@@ -46,21 +51,36 @@ public class GraveService {
         //List<Grave>  graves = getAccessibleGraves();
         List<Grave>  graves = graveRepository.findAll();
         List<GraveSummaryDto> graveSummaries = new ArrayList<>();
+
+
+
         for( Grave grave : graves ){
-                graveSummaries.add( GraveSummaryDto.from( grave, authorityService.getGraveUserAccess( grave.getGraveId())));
+                graveSummaries.add( GraveSummaryDto.from( grave,
+                        authorityService.getGraveUserAccess( grave.getGraveId())));
         }
         return( graveSummaries);
     }
 
+    public GraveSummaryDto getGraveSummary( Long graveId ){
+
+        Optional<Grave>  optionalGrave = graveRepository.findById( graveId );
+        if ( optionalGrave.isEmpty() ) throw new BadRequestException("Graf nummer "+ graveId + "kon niet gevonden worden");
+
+        Grave grave = optionalGrave.get();
+
+        return GraveSummaryDto.from( grave, authorityService.getGraveUserAccess( grave.getGraveId() ) );
+    }
+
+
     public Grave getGrave( Long graveId ){
-        return graveRepository.findById( graveId ).orElseThrow( ()->new BadRequestException( String.format("Grave with id %d does not exist", graveId)));
+        return graveRepository.findById( graveId ).orElseThrow( ()->new BadRequestException( String.format("Graf nummer %d bestaat niet", graveId)));
     }
 
 
     public Grave registerGrave( Grave grave, Boolean publicAccess){
         Optional<Grave> optionalGrave    = graveRepository.findGraveByOccupantFullName( grave.getOccupantFullName() );
         if ( optionalGrave.isPresent() ){
-            throw new DuplicateException(String.format( "Grave with %s already exists", grave.getOccupantFullName() ));
+            throw new DuplicateException(String.format( "Graf nummer %s bestaat al", grave.getOccupantFullName() ));
         }
 
         grave = graveRepository.save( grave );

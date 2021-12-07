@@ -20,10 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -168,20 +165,29 @@ public class ReactionService {
 
             List<Reaction> existingPermissions = findPermissionQuestions( graveId );
             for( Reaction r : existingPermissions ){
-                if ( r.getUserId() == user.getUserId() &&
+                if ( Objects.equals( r.getUserId(), user.getUserId() ) &&
                         ( r.getType().equals("READ") || r.getType().equals("WRITE") )  ){
                     throw new DuplicateException("An applicaton to access grave " + grave.getOccupantFullName() + " by " + user.getFullName() + " is already active");
                 }
             }
 
-            StringBuilder textBuilder = new StringBuilder();
-            textBuilder.append("User ");
-            textBuilder.append(user.getFullName());
-            textBuilder.append(" with email " + user.getEmail() + " ");
-            textBuilder.append("wants " + type + " access ");
-            textBuilder.append("to the grave of " + grave.getOccupantFullName() + ".");
+            String text = "";
+            text += "User " + user.getFullName();
+            text += " with email " + user.getEmail() + " ";
+            text += "wants " + type + " access ";
+            text += "to the grave of " + grave.getOccupantFullName() + ".";
+
             reaction.setType( type );
-            reaction.setText(textBuilder.toString());
+            reaction.setText( text );
+
+//            StringBuilder textBuilder = new StringBuilder();
+//            textBuilder.append("User ");
+//            textBuilder.append(user.getFullName());
+//            textBuilder.append(" with email " + user.getEmail() + " ");
+//            textBuilder.append("wants " + type + " access ");
+//            textBuilder.append("to the grave of " + grave.getOccupantFullName() + ".");
+//            reaction.setType( type );
+//            reaction.setText(textBuilder.toString());
         }
 
         if ( type.equals("FLOWER") || type.equals("TEAR") ) {
@@ -191,7 +197,7 @@ public class ReactionService {
 
         reaction.setGraveId( graveId);
         reaction.setUserId( user.getUserId() );
-        reaction.setUserName( user.getFullName() );
+        //reaction.setUserName( user.getFullName() );
 
         reaction = reactionRepository.save( reaction );
 
@@ -211,13 +217,22 @@ public class ReactionService {
 
 
         if ( multipartFile != null  ){
-            if ( oldReaction.getType().equals("MEDIA") )deleteDirectory( Paths.get(herdenkConfig.getUploads() + oldReaction.getGraveId() + "/" + oldReaction.getReactionId() ).toFile()  );
+            if ( oldReaction.getType().equals("MEDIA") ) {
+                deleteDirectory(Paths.get(herdenkConfig.getUploads() + oldReaction.getGraveId() + "/" + oldReaction.getReactionId()).toFile());
+            }
             try {
                 oldReaction = saveMediaFile( oldReaction, multipartFile);
             } catch (Exception e) {
                 throw new BadRequestException(e.getMessage());
             }
             oldReaction.setType("MEDIA");
+        }else{
+            if ( oldReaction.getType().equals("MEDIA") && reaction.getMediaPath() == null ){
+                deleteDirectory(Paths.get(herdenkConfig.getUploads() + oldReaction.getGraveId() + "/" + oldReaction.getReactionId()).toFile());
+
+                oldReaction.setMediaPath( null);
+                oldReaction.setType("TEXT");
+            }
         }
 
         oldReaction.setText(reaction.getText());
@@ -234,7 +249,7 @@ public class ReactionService {
         String userEmail = authorityService.getCurrentUser();
         User   user = userService.getUserByEmail( userEmail );
         reaction.setUserId(  user.getUserId() );
-        reaction.setUserName(  user.getFullName() );
+        //reaction.setUserName(  user.getFullName() );
 
         // save first to get a reaction id, which is needed in the mediaPath
         reaction = reactionRepository.save( reaction );
@@ -279,8 +294,8 @@ public class ReactionService {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
-        Path filePath;
+        String fileName=StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        Path   filePath;
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             filePath = uploadPath.resolve(fileName);

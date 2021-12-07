@@ -11,5 +11,4 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     List<Reaction> findAllByGraveId( Long graveId);
     List<Reaction> findAllByUserId( Long userId);
     List<Reaction> findReactionsByGraveIdAndType( Long graveId, String type);
-
 }

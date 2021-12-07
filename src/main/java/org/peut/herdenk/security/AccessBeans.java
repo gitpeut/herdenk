@@ -19,12 +19,19 @@ public class AccessBeans {
     private final UserService userService;
     private final AuthorityService authorityService;
     private final ReactionService reactionService;
+    private final RoleBeans roleBeans;
 
     @Autowired
-    public AccessBeans(UserService userService, AuthorityService authorityService, ReactionService reactionService) {
+    public AccessBeans(UserService userService,
+                       AuthorityService authorityService,
+                       ReactionService reactionService,
+                       RoleBeans roleBeans) {
+
         this.userService = userService;
         this.authorityService = authorityService;
         this.reactionService = reactionService;
+        this.roleBeans = roleBeans;
+
     }
 
 
@@ -78,6 +85,7 @@ public class AccessBeans {
 
     public boolean isGraveOwnerOrAuthor( Long reactionId ){
 
+        System.out.println( "reactionid " + reactionId );
         Reaction reaction;
         try {
             reaction = reactionService.getReaction(reactionId);
@@ -85,23 +93,15 @@ public class AccessBeans {
             return false;
         }
 
+        if ( reaction == null )return false;
+
         if ( authorityService.isGraveAccessAtLeast( reaction.getGraveId(), Access.OWNER.name() ) ) return true;
 
         return isSelfOrIsAdmin( reaction.getUserId() ) ;
     }
 
     public boolean isAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) return false;
-        if (authentication.isAuthenticated()) {
-            if ( authentication.getPrincipal().equals("anonymousUser") || authentication.getPrincipal().equals("") ) {
-                System.out.println("isAdmin found user to Anonymous user " + authentication.getPrincipal() );
-                return false;
-            }
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            return userDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-        }
-        return false;
+        return roleBeans.isAdmin();
     }
 
 }

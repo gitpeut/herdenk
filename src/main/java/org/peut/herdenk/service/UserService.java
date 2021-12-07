@@ -3,6 +3,7 @@ package org.peut.herdenk.service;
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.DuplicateException;
 import org.peut.herdenk.model.User;
+import org.peut.herdenk.model.dto.ReactionResponseDto;
 import org.peut.herdenk.repository.UserRepository;
 import org.peut.herdenk.utility.Entropy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class UserService {
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        
+        ReactionResponseDto r = new ReactionResponseDto();
+        r.init( this );
     }
 
     public List<User> getUsers(){

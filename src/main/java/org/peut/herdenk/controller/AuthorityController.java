@@ -3,7 +3,6 @@ package org.peut.herdenk.controller;
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.AuthorityKey;
-import org.peut.herdenk.model.dto.AuthorityByGraveWithNamesDto;
 import org.peut.herdenk.model.dto.AuthorityDto;
 import org.peut.herdenk.model.projection.AuthorityByGraveWithNames;
 import org.peut.herdenk.service.AuthorityService;
@@ -37,12 +36,13 @@ public class AuthorityController {
         return new ResponseEntity<>( authorityDtos, HttpStatus.OK);
     }
 
-    @GetMapping( path="/{userId}/{graveId}" )
+    @GetMapping( path="/user/{userId}/grave/{graveId}" )
     public ResponseEntity<AuthorityDto> getOneAuthority(
             @PathVariable("userId") Long userId,
             @PathVariable("graveId") Long graveId )
     {
 
+        System.out.println("User " + userId + " graveId " + graveId);
         AuthorityKey authorityKey = new AuthorityKey( userId, graveId);
         Authority authority = authorityService.getAuthority( authorityKey );
         AuthorityDto authorityDto = AuthorityDto.from( authority );

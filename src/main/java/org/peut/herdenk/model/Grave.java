@@ -36,6 +36,7 @@ public class Grave {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
+    @OrderBy( "reactionId" )
     private List<Reaction> reactions = new ArrayList<>();
 
     public static Grave from( GraveDto graveDto){

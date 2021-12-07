@@ -44,6 +44,13 @@ public class GraveController {
         return new ResponseEntity<>(graveSummaryDtos,HttpStatus.OK);
     }
 
+    @GetMapping(path = "/summary/{graveId}" )
+    public ResponseEntity<GraveSummaryDto> getSummary(@PathVariable("graveId") Long graveId) {
+        GraveSummaryDto graveSummaryDto = graveService.getGraveSummary( graveId );
+        return new ResponseEntity<>(graveSummaryDto,HttpStatus.OK);
+    }
+
+
     @GetMapping( path="/{graveId}" )
     public ResponseEntity<GraveDto> getGrave( @PathVariable("graveId") Long graveId) {
 

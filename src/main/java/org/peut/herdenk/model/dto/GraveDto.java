@@ -3,6 +3,8 @@ package org.peut.herdenk.model.dto;
 
 import lombok.Data;
 import org.peut.herdenk.model.Grave;
+import org.peut.herdenk.model.Reaction;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;

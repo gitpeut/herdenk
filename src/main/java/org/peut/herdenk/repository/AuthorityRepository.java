@@ -28,7 +28,11 @@ public interface AuthorityRepository extends JpaRepository<Authority, AuthorityK
     @Query("SELECT a FROM Authority a WHERE a.userId = ?1 AND a.graveId = ?2")
     Optional<Authority> findGraveAccessibleByUserId( Long userId, Long graveId );
 
+    @Query("SELECT a FROM Authority a WHERE a.graveId = ?1 AND a.authority = 'OWNER'")
+    List<Authority> findGraveOwners( Long graveId );
 
-    @Query("select a.graveId as graveId,  g.occupantFullName as occupantFullName,  u.fullName as userFullName,  a.authority as access  from Authority a  join User u on u.userId = a.userId  join Grave g on g.graveId = a.graveId  where  a.graveId = ?1")
+
+
+    @Query("select a.graveId as graveId, g.occupantFullName as occupantFullName,  u.userId as userId, u.fullName as userFullName,  a.authority as access  from Authority a  join User u on u.userId = a.userId  join Grave g on g.graveId = a.graveId  where  a.graveId = ?1")
     List<AuthorityByGraveWithNames> findAuthorityByGraveWithNames(Long graveId );
 }
