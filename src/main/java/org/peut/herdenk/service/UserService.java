@@ -2,9 +2,11 @@ package org.peut.herdenk.service;
 
 import org.peut.herdenk.exceptions.BadRequestException;
 import org.peut.herdenk.exceptions.DuplicateException;
+import org.peut.herdenk.model.Authority;
 import org.peut.herdenk.model.User;
 import org.peut.herdenk.model.dto.ReactionResponseDto;
 import org.peut.herdenk.repository.UserRepository;
+import org.peut.herdenk.utility.Access;
 import org.peut.herdenk.utility.Entropy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -102,6 +104,13 @@ public class UserService {
     public User deleteUser( Long userId ){
 
         User user = getUser( userId );
+
+        for( Authority a : user.getAuthorities() ){
+            if ( a.getAuthority().equals( Access.OWNER.name() )){
+                throw new BadRequestException("User owns a grave, cannot be deleted");
+            }
+        }
+
         userRepository.delete( user );
 
         return ( user );
