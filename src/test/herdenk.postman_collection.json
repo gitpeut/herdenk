@@ -278,6 +278,47 @@
 			"response": []
 		},
 		{
+			"name": "update Grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user2JWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"occupantFullName\" : \"Willem 12\",\r\n    \"publicAccess\"   : false   \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get graves",
 			"request": {
 				"auth": {
@@ -311,6 +352,38 @@
 		},
 		{
 			"name": "get graves summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/graves/summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"graves",
+						"summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get graves summary one grave",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -438,6 +511,38 @@
 			"response": []
 		},
 		{
+			"name": "get authority user/grave",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "get authorities for user",
 			"request": {
 				"auth": {
@@ -498,6 +603,40 @@
 						"authorities",
 						"grave",
 						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get authorities for grave with names",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:40545/api/v1/authorities/grave/3/names",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"authorities",
+						"grave",
+						"3",
+						"names"
 					]
 				}
 			},
@@ -1090,6 +1229,46 @@
 		},
 		{
 			"name": "get flowers or tears from grave 4",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userJWT}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:40545/api/v1/reactions/token/4/flower",
+					"host": [
+						"localhost"
+					],
+					"port": "40545",
+					"path": [
+						"api",
+						"v1",
+						"reactions",
+						"token",
+						"4",
+						"flower"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "options request",
 			"request": {
 				"auth": {
 					"type": "bearer",

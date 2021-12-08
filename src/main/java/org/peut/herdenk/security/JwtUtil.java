@@ -66,7 +66,7 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractEmail(token);
 
-        System.out.println(" Attempt to login with email " + username + " Userdetail username " + userDetails.getUsername());
+        System.out.print("Login with email " + userDetails.getUsername());
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
